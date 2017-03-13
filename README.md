@@ -1,1 +1,2 @@
-# JS-Simple-Algorithm
+### JavaScript Algorithm
+**JavaScript简单算法实现**
