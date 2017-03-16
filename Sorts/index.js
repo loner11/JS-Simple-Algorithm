@@ -97,7 +97,7 @@ function selectionSort(arr) {
   return arr;
 }
 
-console.log(selectionSort(arr)); */
+console.log(selectionSort(arr));
 
 //插入排序
 function insertionSort(arr) {
@@ -118,3 +118,88 @@ function insertionSort(arr) {
 }
 
 console.log(insertionSort(arr));
+
+//希尔排序
+function shellSort(arr) {
+  console.time('shellSort');
+  var len = arr.length, tmp, gap = 1;
+  while (gap < len / 3) {
+    //动态定义间隔序列
+    gap = gap*3+1;
+  }
+
+  for (gap; gap > 0; gap = Math.floor(gap/3)) {
+    for (var i=gap; i < len; i++) {
+      tmp = arr[i];
+      for (var j = i - gap; j >= 0 && arr[j] > tmp; j -= gap) {
+        arr[j+gap] = arr[j];
+      }
+      arr[j+gap] = tmp;
+    }
+  }
+  console.timeEnd('shellSort');
+  return arr;
+}
+
+console.log(shellSort(arr));
+
+//归并排序
+function mergeSort(arr) {
+  console.time('mergeSort');
+  var len = arr.length;
+  if (len < 2) {
+    return arr;
+  }
+
+  var middle = Math.floor(len / 2), left = arr.slice(0, middle), right = arr.slice(middle);
+  console.timeEnd('mergeSort');
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+  var result = [];
+
+  while (left.length && right.length) {
+    if (left[0] <= right[0]) {
+      result.push(left.shift());
+    } else {
+      result.push(right.shift());
+    }
+  }
+
+  while (left.length) {
+    result.push(left.shift());
+  }
+
+  while (right.length) {
+    result.push(right.shift());
+  }
+
+  return result;
+}
+
+console.log(mergeSort(arr)); */
+
+//快速排序
+function quickSort(arr) {
+  console.time('quickSort');
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  var pivotIndex = Math.floor(arr.length / 2),
+    pivot = arr.splice(pivotIndex, 1)[0],
+    left = [],
+    right = [];
+  for (var i=0; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+  console.timeEnd('quickSort');
+  return quickSort(left).concat([pivot], quickSort(right));
+}
+
+console.log(quickSort(arr));

@@ -169,3 +169,139 @@
 - 最佳情况: 输入数组按升序排序 T(n) = O(n)
 - 最坏情况: 输入数组按降序排序 T(n) = O(n2)
 - 平均情况: T(n) = O(n2)
+
+####4. 希尔排序
+######(1)算法描述
+希尔排序是简单插入排序的改进版,与插入排序不同之处在于它会优先比较距离较远的元素;基本思想是先将待排序的序列分割成若干子序列分别进行直接插入排序,
+待整个序列中的记录基本有序时,再全体记录进行直接插入排序
+######(2)算法步骤
+
+1. 选择一个增量序列t1, t2, ......, tk, 其中ti>tj, tk=1
+2. 按照增量序列个数k,对序列进行k趟排序
+3. 每趟排序,根据对应的增量 ti,将待排序列分割成若干长度为 m 的子序列,分别对各子表进行直接插入排序.仅增量因子为 1 时,整个序列作为一个表来处理,表长度即为整个序列的长度
+
+######(3)算法实现
+```javascript
+    function shellSort(arr) {
+      console.time('shellSort');
+      var len = arr.length, tmp, gap = 1;
+      while (gap < len / 3) {
+        //动态定义间隔序列
+        gap = gap*3+1;
+      }
+    
+      for (gap; gap > 0; gap = Math.floor(gap/3)) {
+        for (var i=gap; i < len; i++) {
+          tmp = arr[i];
+          for (var j = i - gap; j >= 0 && arr[j] > tmp; j -= gap) {
+            arr[j+gap] = arr[j];
+          }
+          arr[j+gap] = tmp;
+        }
+      }
+      console.timeEnd('shellSort');
+      return arr;
+    }
+    
+    console.log(shellSort(arr));
+```
+######(4)算法分析
+
+- 最佳情况: T(n) = O(nlog2n)
+- 最坏情况: T(n) = O(nlog2n)
+- 平均情况: T(n) = O(nlogn)
+
+####5. 归并排序
+######(1) 算法描述
+归并排序是建立在归并操作上的一种有效的排序算法.该算法是采用分治法（Divide and Conquer）的一个非常典型的应用.归并排序是一种稳定的排序方法.将已有序的子序列合并,得到完全有序的序列;即先使每个子序列有序,再使子序列段间有序.若将两个有序表合并成一个有序表,称为2-路归并.
+######(2) 算法步骤
+
+1. 申请空间,使其大小为两个已经排序序列之和,该空间用来存放合并后的序列
+2. 设置两个指针,最初位置分别为两个已经排序序列的其实位置
+3. 比较两个指针所指向的元素,选择相对小的元素放入到合并空间,并移动指针到下一位
+4. 重复步骤3直到某一指针达到序列尾
+5. 将另一序列剩下的所有元素直接复制到合并序列尾
+
+######(3) 算法实现
+```javascript
+    function mergeSort(arr) {
+      console.time('mergeSort');
+      var len = arr.length;
+      if (len < 2) {
+        return arr;
+      }
+    
+      var middle = Math.floor(len / 2), left = arr.slice(0, middle), right = arr.slice(middle);
+      console.timeEnd('mergeSort');
+      return merge(mergeSort(left), mergeSort(right));
+    }
+    
+    function merge(left, right) {
+      var result = [];
+    
+      while (left.length && right.length) {
+        if (left[0] <= right[0]) {
+          result.push(left.shift());
+        } else {
+          result.push(right.shift());
+        }
+      }
+    
+      while (left.length) {
+        result.push(left.shift());
+      }
+    
+      while (right.length) {
+        result.push(right.shift());
+      }
+    
+      return result;
+    }
+    
+    console.log(mergeSort(arr));
+```
+######(4) 算法分析
+
+- 最佳情况: T(n) = O(n) 
+- 最差情况: T(n) = O(nlogn)
+- 平均情况: T(n) = O(nlogn)
+
+####6. 快速排序
+######(1) 算法描述
+快速排序的基本思想:通过一趟排序将待排记录分隔成独立的两部分,其中一部分记录的关键字均比另一部分的关键字小,则可分别对这两部分记录继续进行排序,以达到整个序列有序.
+######(2) 算法步骤
+
+1. 从待排序列中挑选一个元素,称为基准(pivot)
+2. 重新排序数列,所有元素比基准值小的摆放在基准前面,所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）.在这个分区退出之后,该基准就处于数列的中间位置.这个称为分区（partition）操作
+3. 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序
+
+######(3) 算法实现
+```javascript
+    function quickSort(arr) {
+      console.time('quickSort');
+      if (arr.length <= 1) {
+        return arr;
+      }
+    
+      var pivotIndex = Math.floor(arr.length / 2),
+        pivot = arr.splice(pivotIndex, 1)[0],
+        left = [],
+        right = [];
+      for (var i=0; i < arr.length; i++) {
+        if (arr[i] < pivot) {
+          left.push(arr[i]);
+        } else {
+          right.push(arr[i]);
+        }
+      }
+      console.timeEnd('quickSort');
+      return quickSort(left).concat([pivot], quickSort(right));
+    }
+    
+    console.log(quickSort(arr));
+```
+######(4) 算法分析
+
+- 最佳情况: T(n) = O(nlogn)
+- 最差情况: T(n) = O(n²)
+- 平均情况: T(n) = O(nlogn)
